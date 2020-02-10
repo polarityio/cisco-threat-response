@@ -26,38 +26,26 @@ function startup(logger) {
   let defaults = {};
   Logger = logger;
 
-  if (
-    typeof config.request.cert === "string" &&
-    config.request.cert.length > 0
-  ) {
+  if (typeof config.request.cert === "string" && config.request.cert.length > 0)
     defaults.cert = fs.readFileSync(config.request.cert);
-  }
 
-  if (typeof config.request.key === "string" && config.request.key.length > 0) {
+  if (typeof config.request.key === "string" && config.request.key.length > 0)
     defaults.key = fs.readFileSync(config.request.key);
-  }
 
   if (
     typeof config.request.passphrase === "string" &&
     config.request.passphrase.length > 0
-  ) {
+  )
     defaults.passphrase = config.request.passphrase;
-  }
 
-  if (typeof config.request.ca === "string" && config.request.ca.length > 0) {
+  if (typeof config.request.ca === "string" && config.request.ca.length > 0)
     defaults.ca = fs.readFileSync(config.request.ca);
-  }
 
-  if (
-    typeof config.request.proxy === "string" &&
-    config.request.proxy.length > 0
-  ) {
+  if (typeof config.request.proxy === "string" && config.request.proxy.length > 0)
     defaults.proxy = config.request.proxy;
-  }
 
-  if (typeof config.request.rejectUnauthorized === "boolean") {
+  if (typeof config.request.rejectUnauthorized === "boolean")
     defaults.rejectUnauthorized = config.request.rejectUnauthorized;
-  }
 
   requestWithDefaults = request.defaults(defaults);
 }
@@ -124,7 +112,7 @@ function doLookup(entities, options, cb) {
 
     Logger.trace({ token: token }, "what does the token look like in doLookup");
 
-    entities.forEach(entity => {
+    entities.forEach((entity) => {
       //do the lookup
       let requestOptions = {
         method: "POST",
@@ -139,29 +127,17 @@ function doLookup(entities, options, cb) {
       };
 
       if (entity.isIPv4) {
-        requestOptions.body = [
-          { value: entity.value.toLowerCase(), type: "ip" }
-        ];
+        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "ip" }];
       } else if (entity.isMD5) {
-        requestOptions.body = [
-          { value: entity.value.toLowerCase(), type: "md5" }
-        ];
+        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "md5" }];
       } else if (entity.isSHA1) {
-        requestOptions.body = [
-          { value: entity.value.toLowerCase(), type: "sha1" }
-        ];
+        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "sha1" }];
       } else if (entity.isSHA256) {
-        requestOptions.body = [
-          { value: entity.value.toLowerCase(), type: "sha256" }
-        ];
+        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "sha256" }];
       } else if (entity.isDomain) {
-        requestOptions.body = [
-          { value: entity.value.toLowerCase(), type: "domain" }
-        ];
+        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "domain" }];
       } else if (entity.isEmail) {
-        requestOptions.body = [
-          { value: entity.value.toLowerCase(), type: "email" }
-        ];
+        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "email" }];
       } else {
         return;
       }
@@ -206,13 +182,15 @@ function doLookup(entities, options, cb) {
             // no result found
             error = {
               err: "Non-Existent Device",
-              detail: "A warning will result if an investigation is performed with a non-existent device."
+              detail:
+                "A warning will result if an investigation is performed with a non-existent device."
             };
           } else if (res.statusCode === 429) {
             // no result found
             error = {
               err: "API Limit Exceeded",
-              detail: "You may have exceeded the rate limits for your organization or package"
+              detail:
+                "You may have exceeded the rate limits for your organization or package"
             };
           } else if (Math.round(res.statusCode / 10) * 10 === 500) {
             error = {
@@ -233,7 +211,7 @@ function doLookup(entities, options, cb) {
         return;
       }
 
-      results.forEach(result => {
+      results.forEach((result) => {
         if (
           result.body === null ||
           _isMiss(result.body.data) ||
@@ -282,12 +260,7 @@ function validateStringOption(errors, options, optionName, errMessage) {
 function validateOptions(options, callback) {
   let errors = [];
 
-  validateStringOption(
-    errors,
-    options,
-    "clientId",
-    "You must provide a valid Client ID"
-  );
+  validateStringOption(errors, options, "clientId", "You must provide a valid Client ID");
   validateStringOption(
     errors,
     options,
