@@ -11,6 +11,8 @@ let requestWithDefaults;
 
 const MAX_PARALLEL_LOOKUPS = 10;
 
+const IGNORED_IPS = new Set(["127.0.0.1", "255.255.255.255", "0.0.0.0"]);
+
 const NodeCache = require("node-cache");
 const tokenCache = new NodeCache({
   stdTTL: 1000 * 1000
@@ -50,13 +52,10 @@ function startup(logger) {
   requestWithDefaults = request.defaults(defaults);
 }
 
-function getTokenCacheKey(options) {
-  return options.apiKey + options.apiSecret;
-}
-
 function getAuthToken(options, callback) {
-  let cacheKey = getTokenCacheKey(options);
-  //let token = tokenCache.get(cacheKey);
+  const cacheKey = options.apiKey + options.apiSecret;
+  let token = tokenCache.get(cacheKey);
+  if (token) return callback(null, token);
 
   requestWithDefaults(
     {
@@ -76,21 +75,16 @@ function getAuthToken(options, callback) {
       json: true
     },
     (err, resp, body) => {
-      if (err) {
-        callback(err);
-        return;
-      }
+      if (err) return callback(err);
 
-      Logger.trace({ body: body }, "Result of token lookup");
+      Logger.trace({ body }, "Result of token lookup");
 
-      if (resp.statusCode != 200) {
-        callback({ err: new Error("status code was not 200"), body: body });
-        return;
-      }
+      if (resp.statusCode != 200)
+        return callback({ err: new Error("status code was not 200"), body });
 
       tokenCache.set(cacheKey, body.access_token);
 
-      Logger.trace({ tokenCache: tokenCache }, "Checking TokenCache");
+      Logger.trace({ tokenCache }, "Checking TokenCache");
 
       callback(null, body.access_token);
     }
@@ -106,109 +100,95 @@ function doLookup(entities, options, cb) {
   getAuthToken(options, (err, token) => {
     if (err) {
       Logger.error("get token errored", err);
-      //callback({ err: err });
-      return;
+      return cb({ err, detail: "Error getting Auth Token" });
     }
 
-    Logger.trace({ token: token }, "what does the token look like in doLookup");
+    Logger.trace({ token }, "Token in doLookup");
 
-    entities.forEach((entity) => {
-      //do the lookup
-      let requestOptions = {
-        method: "POST",
-        uri: `${options.url}/iroh/iroh-enrich/observe/observables`,
-        headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
-          Accept: "application/json"
-          //'Client-Type': 'API'
-        },
-        json: true
-      };
+    entities
+      .filter(({ isIP, value }) => !isIP || (isIP && !IGNORED_IPS.has(value)))
+      .forEach((entity) => {
+        let requestOptions = {
+          method: "POST",
+          uri: `${options.url}/iroh/iroh-enrich/observe/observables`,
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "Client-Type": "API"
+          },
+          json: true
+        };
 
-      if (entity.isIPv4) {
-        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "ip" }];
-      } else if (entity.isMD5) {
-        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "md5" }];
-      } else if (entity.isSHA1) {
-        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "sha1" }];
-      } else if (entity.isSHA256) {
-        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "sha256" }];
-      } else if (entity.isDomain) {
-        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "domain" }];
-      } else if (entity.isEmail) {
-        requestOptions.body = [{ value: entity.value.toLowerCase(), type: "email" }];
-      } else {
-        return;
-      }
+        if (entity.isIPv4) {
+          requestOptions.body = [{ value: entity.value.toLowerCase(), type: "ip" }];
+        } else if (entity.isMD5) {
+          requestOptions.body = [{ value: entity.value.toLowerCase(), type: "md5" }];
+        } else if (entity.isSHA1) {
+          requestOptions.body = [{ value: entity.value.toLowerCase(), type: "sha1" }];
+        } else if (entity.isSHA256) {
+          requestOptions.body = [{ value: entity.value.toLowerCase(), type: "sha256" }];
+        } else if (entity.isDomain) {
+          requestOptions.body = [{ value: entity.value.toLowerCase(), type: "domain" }];
+        } else if (entity.isEmail) {
+          requestOptions.body = [{ value: entity.value.toLowerCase(), type: "email" }];
+        } else {
+          return;
+        }
 
-      Logger.trace({ uri: requestOptions }, "Request URI");
-      //Logger.trace({ uri: requestOptions.headers }, "Request Headers");
-      //Logger.trace({ uri: requestOptions.qs }, "Request Query Parameters");
+        Logger.trace({ uri: requestOptions }, "Request URI");
 
-      tasks.push(function(done) {
-        requestWithDefaults(requestOptions, function(error, res, body) {
-          if (error) {
-            return done(error);
-          }
+        tasks.push(function(done) {
+          requestWithDefaults(requestOptions, function(error, res, body) {
+            if (error) return done(error);
 
-          Logger.trace(requestOptions);
-          Logger.trace(
-            { body: body, statusCode: res ? res.statusCode : "N/A" },
-            "Result of Lookup"
-          );
+            Logger.trace(
+              { body, statusCode: res ? res.statusCode : "N/A" },
+              "Result of Lookup"
+            );
 
-          let result = {};
+            let result = {};
 
-          if (res.statusCode === 200) {
-            // we got data!
-            result = {
-              entity: entity,
-              body: body
-            };
-          } else if (res.statusCode === 404) {
-            // no result found
-            result = {
-              entity: entity,
-              body: null
-            };
-          } else if (res.statusCode === 202) {
-            // no result found
-            result = {
-              entity: entity,
-              body: null
-            };
-          } else if (res.statusCode === 403) {
-            // no result found
-            error = {
-              err: "Non-Existent Device",
-              detail:
-                "A warning will result if an investigation is performed with a non-existent device."
-            };
-          } else if (res.statusCode === 429) {
-            // no result found
-            error = {
-              err: "API Limit Exceeded",
-              detail:
-                "You may have exceeded the rate limits for your organization or package"
-            };
-          } else if (Math.round(res.statusCode / 10) * 10 === 500) {
-            error = {
-              err: "Server Error",
-              detail: "Unexpected Server Error"
-            };
-          }
+            if (res.statusCode === 200) {
+              result = { entity, body };
+            } else if (res.statusCode === 404) {
+              result = {
+                entity,
+                body: null
+              };
+            } else if (res.statusCode === 202) {
+              result = {
+                entity,
+                body: null
+              };
+            } else if (res.statusCode === 403) {
+              error = {
+                err: "Non-Existent Device",
+                detail:
+                  "A warning will result if an investigation is performed with a non-existent device."
+              };
+            } else if (res.statusCode === 429) {
+              error = {
+                err: "API Limit Exceeded",
+                detail:
+                  "You may have exceeded the rate limits for your organization or package"
+              };
+            } else if (Math.round(res.statusCode / 10) * 10 === 500) {
+              error = {
+                err: "Server Error",
+                detail: "Unexpected Server Error"
+              };
+            }
 
-          done(null, result);
+            done(null, result);
+          });
         });
       });
-    });
 
     async.parallelLimit(tasks, MAX_PARALLEL_LOOKUPS, (err, results) => {
       if (err) {
-        Logger.error({ err: err }, "Error");
-        cb(err);
-        return;
+        Logger.error({ err }, "Error");
+        return cb({ err, detail: "Error Requesting Observables" });
       }
 
       results.forEach((result) => {
@@ -239,9 +219,7 @@ function doLookup(entities, options, cb) {
 }
 
 function _isMiss(body) {
-  if (!body || (body && Array.isArray(body) && body.length === 0)) {
-    return true;
-  }
+  return !body || (body && Array.isArray(body) && body.length === 0);
 }
 
 function validateStringOption(errors, options, optionName, errMessage) {
@@ -249,17 +227,25 @@ function validateStringOption(errors, options, optionName, errMessage) {
     typeof options[optionName].value !== "string" ||
     (typeof options[optionName].value === "string" &&
       options[optionName].value.length === 0)
-  ) {
+  )
     errors.push({
       key: optionName,
       message: errMessage
     });
-  }
 }
+
+const validateUrlOption = ({ value: url }, otherErrors = []) =>
+  url && url.endsWith("/")
+    ? otherErrors.concat({
+        key: "url",
+        message: "Your Url must not end with a /"
+      })
+    : otherErrors;
 
 function validateOptions(options, callback) {
   let errors = [];
 
+  validateUrlOption(options.url, errors);
   validateStringOption(errors, options, "clientId", "You must provide a valid Client ID");
   validateStringOption(
     errors,
@@ -271,7 +257,7 @@ function validateOptions(options, callback) {
 }
 
 module.exports = {
-  doLookup: doLookup,
-  startup: startup,
-  validateOptions: validateOptions
+  doLookup,
+  startup,
+  validateOptions
 };
