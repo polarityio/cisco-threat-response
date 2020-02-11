@@ -12,11 +12,11 @@ You can check out the integration in action below:
 
 URL of the Cisco Threat Response API
 
-### TruSTAR Client ID
+### Threat Response Client ID
 
 Client ID used to authenticate with the Cisco Threat Response API
 
-### TruSTAR Client Password
+### Threat Response Client Password
 
 Client Password used to authenticate with the Cisco Threat Response API
 
