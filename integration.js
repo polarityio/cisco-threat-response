@@ -53,7 +53,7 @@ function startup(logger) {
 }
 
 function getAuthToken(options, callback) {
-  const cacheKey = options.apiKey + options.apiSecret;
+  const cacheKey = options.url + options.apiKey + options.apiSecret;
   let token = tokenCache.get(cacheKey);
   if (token) return callback(null, token);
 
@@ -99,8 +99,11 @@ function doLookup(entities, options, cb) {
 
   getAuthToken(options, (err, token) => {
     if (err) {
-      Logger.error("get token errored", err);
-      return cb({ err, detail: "Error getting Auth Token" });
+      Logger.error({ err }, "get token errored");
+      return cb({ 
+        err: "Error getting Auth Token",
+        detail: `Auth Error: Verify your URL, Client ID, and Client password are correct ${err}`
+      });
     }
 
     Logger.trace({ token }, "Token in doLookup");
@@ -190,7 +193,8 @@ function doLookup(entities, options, cb) {
         Logger.error({ err }, "Error");
         return cb({ err, detail: "Error Requesting Observables" });
       }
-
+      
+      Logger.trace({ results }, "Results")
       results.forEach((result) => {
         if (
           result.body === null ||
