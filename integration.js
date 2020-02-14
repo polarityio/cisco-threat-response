@@ -91,10 +91,10 @@ function getAuthToken(options, callback) {
   );
 }
 
-function doLookup(entities, options, cb) {
+function doLookup(entities, { url, ..._options }, cb) {
   let lookupResults = [];
   let tasks = [];
-
+  let options = { ..._options, url: url.endsWith("/") ? url.slice(0, -1) : url };
   Logger.debug(entities);
 
   getAuthToken(options, (err, token) => {
@@ -239,17 +239,17 @@ function validateStringOption(errors, options, optionName, errMessage) {
 }
 
 const validateUrlOption = ({ value: url }, otherErrors = []) =>
-  url && url.endsWith("/")
-    ? otherErrors.concat({
-        key: "url",
-        message: "Your Url must not end with a /"
-      })
-    : otherErrors;
+  url && url.endsWith("//") && 
+    otherErrors.push({
+      key: "url",
+      message: "Your Url must not end with a //"
+    });
 
 function validateOptions(options, callback) {
   let errors = [];
 
   validateUrlOption(options.url, errors);
+  validateStringOption(errors, options, "url", "You must provide a valid API URL");
   validateStringOption(errors, options, "clientId", "You must provide a valid Client ID");
   validateStringOption(
     errors,
