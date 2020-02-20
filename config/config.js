@@ -24,7 +24,7 @@ module.exports = {
    */
   description:
     "Cisco Threat Response is built upon a collection of APIs which can be used to integrate your Cisco and third-party security products, automate the incident response process, and manage threat intelligence and security context data in a single location.",
-  entityTypes: ['IPv4', 'hash', 'domain', 'email'],
+  entityTypes: ["IPv4", "hash", "domain", "email"],
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
    * the below files can be used in your custom template.
@@ -74,10 +74,10 @@ module.exports = {
     // the url parameter (by embedding the auth info in the uri)
     proxy: "",
 
-    rejectUnauthorized: false
+    rejectUnauthorized: true
   },
   logging: {
-    level: "trace" //trace, debug, info, warn, error, fatal
+    level: "info" //trace, debug, info, warn, error, fatal
   },
   /**
    * Options that are displayed to the user/admin in the Polarity integration user-interface.  Should be structured
@@ -93,7 +93,7 @@ module.exports = {
       description:
         "The base URL for the Cisco Threat Response API including the schema (i.e., https://)",
       type: "text",
-      default: "https://visibility.amp.cisco.com",
+      default: "",
       userCanEdit: false,
       adminOnly: true
     },

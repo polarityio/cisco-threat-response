@@ -1,101 +1,103 @@
 <div class="p-non-exfoliate-outer-padding">
 {{#each details.data as |object index|}}
   {{#if object.module}}
-  <div>
-    <a href="https://www.talosintelligence.com/reputation_center/lookup?search={{block.entity.value}}" class="p-link">(Pivot To Analysis Details)</a>
-  </div>
+    {{#if (gt index 0)}}
+      <hr>
+    {{/if}}
+    <div>
+      <a href="https://www.talosintelligence.com/reputation_center/lookup?search={{block.entity.value}}" class="p-link">(Pivot To Analysis Details)</a>
+    </div>
 
-  <h1 class="p-title">
-      {{fa-icon "eye" fixedWidth=true}}  Analysis Summary
-  </h1>
-
-  <div>
-      <span class="p-key">Module: </span>
-      <span class="p-value">{{object.module}}</span>
-  </div>
-
-  {{#if object.data.verdicts}}
     <h1 class="p-title">
-      {{fa-icon "table" fixedWidth=true}}  Verdict Details
+        {{fa-icon "eye" fixedWidth=true}}  Analysis Summary
     </h1>
-    {{#each object.data.verdicts.docs as |doc|}}
-      {{#if (eq doc.disposition_name "Suspicious")}}
-        <div>
-          <span class="p-key">Verdict Name: </span>
-          <span class="p-value" style="color:red">{{doc.disposition_name}}</span>
-        </div>
-      {{/if}}
-      {{#if (eq doc.disposition_name "Unknown")}}
-        <div>
-          <span class="p-key">Verdict Name: </span>
-          <span class="p-value">{{doc.disposition_name}}</span>
-        </div>
-      {{/if}}
-      <div>
-        <span class="p-key">Valid Start Time: </span>
-        <span class="p-value">{{doc.valid_time.start_time}}</span>
-      </div>
-      <div>
-        <span class="p-key">Valid End Time: </span>
-        <span class="p-value">{{doc.valid_time.end_time}}</span>
-      </div>
-      <br>
-    {{/each}}
-  {{/if}}
 
-  {{#if object.data.judgements}}
-    <h1 class="p-title">
-      {{fa-icon "table" fixedWidth=true}}  Judgement Details
-    </h1>
-    {{#each object.data.judgements.docs as |doc|}}
-      {{#if (eq doc.disposition_name "Suspicious")}}
+    <div>
+        <span class="p-key">Module: </span>
+        <span class="p-value">{{object.module}}</span>
+    </div>
+
+    {{#if object.data.verdicts}}
+      <h1 class="p-title">
+        {{fa-icon "table" fixedWidth=true}}  Verdict Details
+      </h1>
+      {{#each object.data.verdicts.docs as |doc|}}
+        {{#if (eq doc.disposition_name "Suspicious")}}
+          <div>
+            <span class="p-key">Verdict Name: </span>
+            <span class="p-value" style="color:red">{{doc.disposition_name}}</span>
+          </div>
+        {{/if}}
+        {{#if (eq doc.disposition_name "Unknown")}}
+          <div>
+            <span class="p-key">Verdict Name: </span>
+            <span class="p-value">{{doc.disposition_name}}</span>
+          </div>
+        {{/if}}
         <div>
-          <span class="p-key">Judgement Name: </span>
-          <span class="p-value" style="color:red">{{doc.disposition_name}}</span>
+          <span class="p-key">Valid Start Time: </span>
+          <span class="p-value">{{doc.valid_time.start_time}}</span>
         </div>
-      {{/if}}
-      {{#if (eq doc.disposition_name "Unknown")}}
         <div>
-          <span class="p-key">Judgement Name: </span>
-          <span class="p-value">{{doc.disposition_name}}</span>
+          <span class="p-key">Valid End Time: </span>
+          <span class="p-value">{{doc.valid_time.end_time}}</span>
         </div>
-      {{/if}}
-      <div>
-        <span class="p-key">Priority: </span>
-        <span class="p-value">{{doc.priority}}</span>
-      </div>
-      <div>
-        <span class="p-key">Severity: </span>
-        <span class="p-value">{{doc.severity}}</span>
-      </div>
-      <div>
-        <span class="p-key">TLP: </span>
-        <span class="p-value">{{doc.tlp}}</span>
-      </div>
-      <div>
-        <span class="p-key">Confidence: </span>
-        <span class="p-value">{{doc.confidence}}</span>
-      </div>
-      <div>
-        <span class="p-key">Judgement Source: </span>
-        <span class="p-value">{{doc.source}}</span>
-      </div>
-      <div>
-        <span class="p-key">Judgement Reason: </span>
-        <span class="p-value">{{doc.reason}}</span>
-      </div>
-      <div>
-        <span class="p-key">Valid Start Time: </span>
-        <span class="p-value">{{doc.valid_time.start_time}}</span>
-      </div>
-      <div>
-        <span class="p-key">Valid End Time: </span>
-        <span class="p-value">{{doc.valid_time.end_time}}</span>
-      </div>
-      <br>
-    {{/each}}
-  {{/if}}
-  <hr>
+        <br>
+      {{/each}}
+    {{/if}}
+
+    {{#if object.data.judgements}}
+      <h1 class="p-title">
+        {{fa-icon "table" fixedWidth=true}}  Judgement Details
+      </h1>
+      {{#each object.data.judgements.docs as |doc|}}
+        {{#if (eq doc.disposition_name "Suspicious")}}
+          <div>
+            <span class="p-key">Judgement Name: </span>
+            <span class="p-value" style="color:red">{{doc.disposition_name}}</span>
+          </div>
+        {{/if}}
+        {{#if (eq doc.disposition_name "Unknown")}}
+          <div>
+            <span class="p-key">Judgement Name: </span>
+            <span class="p-value">{{doc.disposition_name}}</span>
+          </div>
+        {{/if}}
+        <div>
+          <span class="p-key">Priority: </span>
+          <span class="p-value">{{doc.priority}}</span>
+        </div>
+        <div>
+          <span class="p-key">Severity: </span>
+          <span class="p-value">{{doc.severity}}</span>
+        </div>
+        <div>
+          <span class="p-key">TLP: </span>
+          <span class="p-value">{{doc.tlp}}</span>
+        </div>
+        <div>
+          <span class="p-key">Confidence: </span>
+          <span class="p-value">{{doc.confidence}}</span>
+        </div>
+        <div>
+          <span class="p-key">Judgement Source: </span>
+          <span class="p-value">{{doc.source}}</span>
+        </div>
+        <div>
+          <span class="p-key">Judgement Reason: </span>
+          <span class="p-value">{{doc.reason}}</span>
+        </div>
+        <div>
+          <span class="p-key">Valid Start Time: </span>
+          <span class="p-value">{{doc.valid_time.start_time}}</span>
+        </div>
+        <div>
+          <span class="p-key">Valid End Time: </span>
+          <span class="p-value">{{doc.valid_time.end_time}}</span>
+        </div>
+        <br>
+      {{/each}}
+    {{/if}}
   {{/if}}
 {{/each}}
 </div>

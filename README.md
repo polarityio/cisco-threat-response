@@ -2,6 +2,8 @@
 
 The Polarity Cisco Threat Response integration allows Polarity to search the Threat Response Enrich API to return information about various indicator types.
 
+<img width="350" alt="Example Integration" src="./assets/integration-example.png">
+
 You can check out the integration in action below:
 
 ## Threat Response Integration Options
@@ -10,11 +12,11 @@ You can check out the integration in action below:
 
 URL of the Cisco Threat Response API
 
-### TruSTAR Client ID
+### Threat Response Client ID
 
 Client ID used to authenticate with the Cisco Threat Response API
 
-### TruSTAR Client Password
+### Threat Response Client Password
 
 Client Password used to authenticate with the Cisco Threat Response API
 
