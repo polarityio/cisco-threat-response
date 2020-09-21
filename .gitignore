@@ -21,14 +21,15 @@ dependency-reduced-pom.xml
 
 # Ignore local log files
 *.log
+logs/
 *.remote-sync.json
-
 
 # Ignore Generated HTML README Files
 README.html
 
 # Ignored installed NPM modules
 node_modules/
-test-runner.js
 
-.polarity.conf
+#Ignore VSCode files
+*.history
+*.VSCode

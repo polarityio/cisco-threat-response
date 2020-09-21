@@ -93,7 +93,7 @@ module.exports = {
       description:
         "The base URL for the Cisco Threat Response API including the schema (i.e., https://)",
       type: "text",
-      default: "",
+      default: "https://visibility.amp.cisco.com",
       userCanEdit: false,
       adminOnly: true
     },
