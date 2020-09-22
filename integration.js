@@ -15,7 +15,7 @@ const IGNORED_IPS = new Set(["127.0.0.1", "255.255.255.255", "0.0.0.0"]);
 
 const NodeCache = require("node-cache");
 const tokenCache = new NodeCache({
-  stdTTL: 1000 * 1000
+  stdTTL: 10 * 59
 });
 
 /**
@@ -175,6 +175,12 @@ function doLookup(entities, { url, ..._options }, cb) {
                 err: "API Limit Exceeded",
                 detail:
                   "You may have exceeded the rate limits for your organization or package"
+              };
+            }else if (res.statusCode === 401) {
+              error = {
+                err: "JWT Token Expired",
+                detail:
+                  "JWT Token expired"
               };
             } else if (Math.round(res.statusCode / 10) * 10 === 500) {
               error = {
