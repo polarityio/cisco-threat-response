@@ -1,16 +1,16 @@
 {{#if details.data}}
   {{#each details.data as |object index|}}
-      <span class="integration-summary-tag integration-background-color integration-border-color">
+      <span {{on "click" (optional this.scrollToIntegration)}} class="integration-summary-tag integration-background-color integration-border-color">
         <span class="acronym integration-text-bold-color">{{block.acronym}}</span>
         <span class="integration-text-color">Verdict Count: {{object.data.verdicts.count}}</span>
       </span>
-      <span class="integration-summary-tag integration-background-color integration-border-color">
+      <span {{on "click" (optional this.scrollToIntegration)}} class="integration-summary-tag integration-background-color integration-border-color">
         <span class="acronym integration-text-bold-color">{{block.acronym}}</span>
         <span class="integration-text-color">Judgement Count: {{object.data.judgements.count}}</span>
       </span>
       {{#each object.data.judgements.docs as |doc|}}
         {{#if (eq doc.disposition_name "Suspicious")}}
-          <span class="integration-summary-tag integration-background-color integration-border-color">
+          <span {{on "click" (optional this.scrollToIntegration)}} class="integration-summary-tag integration-background-color integration-border-color">
             <span class="acronym integration-text-bold-color">{{block.acronym}}</span>
             <span class="integration-text-color">SUSPICIOUS JUDGEMENT!</span>
           </span>
@@ -18,7 +18,7 @@
       {{/each}}
       {{#each object.data.verdicts.docs as |doc|}}
         {{#if (eq doc.disposition_name "Suspicious")}}
-          <span class="integration-summary-tag integration-background-color integration-border-color">
+          <span {{on "click" (optional this.scrollToIntegration)}} class="integration-summary-tag integration-background-color integration-border-color">
             <span class="acronym integration-text-bold-color">{{block.acronym}}</span>
             <span class="integration-text-color">SUSPICIOUS VERDICT!</span>
           </span>
