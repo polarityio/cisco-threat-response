@@ -31,5 +31,5 @@ README.html
 node_modules/
 
 #Ignore VSCode files
-*.history
-*.VSCode
+.history
+.VSCode

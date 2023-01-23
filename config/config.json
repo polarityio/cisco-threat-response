@@ -1,0 +1,64 @@
+{
+  "name": "Cisco Threat Response",
+  "acronym": "CTR",
+  "description": "Cisco Threat Response is built upon a collection of APIs which can be used to integrate your Cisco and third-party security products, automate the incident response process, and manage threat intelligence and security context data in a single location.",
+  "entityTypes": ["IPv4", "hash", "domain", "email"],
+  "defaultColor": "light-pink",
+  "styles": ["./styles/style.less"],
+  "block": {
+    "component": {
+      "file": "./components/block.js"
+    },
+    "template": {
+      "file": "./templates/block.hbs"
+    }
+  },
+  "summary": {
+    "component": {
+      "file": "./components/summary.js"
+    },
+    "template": {
+      "file": "./templates/summary.hbs"
+    }
+  },
+  "request": {
+    "cert": "",
+    "key": "",
+    "passphrase": "",
+    "ca": "",
+    "proxy": "",
+    "rejectUnauthorized": true
+  },
+  "logging": {
+    "level": "info"
+  },
+  "options": [
+    {
+      "key": "url",
+      "name": "Base Cisco Threat Response API URL",
+      "description": "The base URL for the Cisco Threat Response API including the schema (i.e., https://)",
+      "type": "text",
+      "default": "https://visibility.amp.cisco.com",
+      "userCanEdit": false,
+      "adminOnly": true
+    },
+    {
+      "key": "clientId",
+      "name": "Valid Client ID",
+      "description": "Valid Cisco Threat Response Client ID",
+      "default": "",
+      "type": "password",
+      "userCanEdit": true,
+      "adminOnly": false
+    },
+    {
+      "key": "clientPassword",
+      "name": "Valid Client Password",
+      "description": "Valid Cisco Threat Response Client Password",
+      "default": "",
+      "type": "password",
+      "userCanEdit": true,
+      "adminOnly": false
+    }
+  ]
+}
