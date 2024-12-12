@@ -24,7 +24,7 @@ module.exports = {
    */
   description:
     'Cisco Threat Response is built upon a collection of APIs which can be used to integrate your Cisco and third-party security products, automate the incident response process, and manage threat intelligence and security context data in a single location.',
-  entityTypes: ['IPv4', 'hash', 'domain', 'email'],
+  entityTypes: ['IPv4', 'MD5', 'SHA1', 'SHA256', 'domain', 'email'],
   defaultColor: 'light-pink',
   /**
    * An array of style files (css or less) that will be included for your integration. Any styles specified in
@@ -73,7 +73,7 @@ module.exports = {
     ca: '',
     // An HTTP proxy to be used. Supports proxy Auth with Basic Auth, identical to support for
     // the url parameter (by embedding the auth info in the uri)
-    proxy: ""
+    proxy: ''
   },
   logging: {
     level: 'info' //trace, debug, info, warn, error, fatal
