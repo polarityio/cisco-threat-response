@@ -3,9 +3,18 @@
   "name": "Cisco Threat Response",
   "acronym": "CTR",
   "description": "Cisco Threat Response is built upon a collection of APIs which can be used to integrate your Cisco and third-party security products, automate the incident response process, and manage threat intelligence and security context data in a single location.",
-  "entityTypes": ["IPv4", "MD5", "SHA1", "SHA256", "domain", "email"],
+  "entityTypes": [
+    "IPv4",
+    "MD5",
+    "SHA1",
+    "SHA256",
+    "domain",
+    "email"
+  ],
   "defaultColor": "light-pink",
-  "styles": ["./styles/style.less"],
+  "styles": [
+    "./styles/style.less"
+  ],
   "block": {
     "component": {
       "file": "./components/block.js"
@@ -53,5 +62,10 @@
       "userCanEdit": true,
       "adminOnly": false
     }
-  ]
+  ],
+  "reducer": {
+    "details": {
+      "file": "./reducers/details.json"
+    }
+  }
 }

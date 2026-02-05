@@ -1,0 +1,182 @@
+{
+  "data": [
+    {
+      "module": "AMP Threat Grid",
+      "module_instance_id": "0ef69b41-e4d5-4f45-a91d-5c1d3c8c4b9e",
+      "module_type_id": "2e6f8e4d-3f7c-4b2a-9d6e-1c8f5d9e3a7b",
+      "data": {
+        "verdicts": {
+          "count": 2,
+          "docs": [
+            {
+              "type": "verdict",
+              "observable": {
+                "type": "ip",
+                "value": "198.51.100.42"
+              },
+              "disposition": 2,
+              "disposition_name": "Suspicious",
+              "valid_time": {
+                "start_time": "2024-01-15T10:30:00.000Z",
+                "end_time": "2024-02-15T10:30:00.000Z"
+              },
+              "source": "AMP Threat Grid",
+              "source_uri": "https://panacea.threatgrid.com/mask/doc/fr-malicious"
+            },
+            {
+              "type": "verdict",
+              "observable": {
+                "type": "ip",
+                "value": "198.51.100.42"
+              },
+              "disposition": 5,
+              "disposition_name": "Unknown",
+              "valid_time": {
+                "start_time": "2024-01-14T08:15:00.000Z",
+                "end_time": "2024-02-14T08:15:00.000Z"
+              },
+              "source": "Cisco Umbrella",
+              "source_uri": "https://investigate.api.umbrella.com"
+            }
+          ]
+        },
+        "judgements": {
+          "count": 3,
+          "docs": [
+            {
+              "type": "judgement",
+              "observable": {
+                "type": "ip",
+                "value": "198.51.100.42"
+              },
+              "disposition": 2,
+              "disposition_name": "Malicious",
+              "severity": "High",
+              "priority": 85,
+              "confidence": "High",
+              "tlp": "amber",
+              "source": "Talos Intelligence",
+              "reason": "IP associated with known botnet C2 infrastructure",
+              "valid_time": {
+                "start_time": "2024-01-15T14:22:00.000Z",
+                "end_time": "2024-04-15T14:22:00.000Z"
+              },
+              "observable_context": {
+                "ports": [
+                  4444,
+                  8080
+                ],
+                "protocols": [
+                  "TCP"
+                ]
+              }
+            },
+            {
+              "type": "judgement",
+              "observable": {
+                "type": "ip",
+                "value": "198.51.100.42"
+              },
+              "disposition": 3,
+              "disposition_name": "Suspicious",
+              "severity": "Medium",
+              "priority": 65,
+              "confidence": "Medium",
+              "tlp": "green",
+              "source": "Cisco Secure Malware Analytics",
+              "reason": "Multiple failed authentication attempts detected",
+              "valid_time": {
+                "start_time": "2024-01-16T09:45:00.000Z",
+                "end_time": "2024-03-16T09:45:00.000Z"
+              }
+            },
+            {
+              "type": "judgement",
+              "observable": {
+                "type": "ip",
+                "value": "198.51.100.42"
+              },
+              "disposition": 2,
+              "disposition_name": "Malicious",
+              "severity": "Critical",
+              "priority": 95,
+              "confidence": "High",
+              "tlp": "red",
+              "source": "Cisco SecureX Threat Response",
+              "reason": "Active malware distribution observed in last 24 hours",
+              "valid_time": {
+                "start_time": "2024-01-16T16:00:00.000Z",
+                "end_time": "2024-02-16T16:00:00.000Z"
+              },
+              "external_ids": [
+                "CVE-2023-12345"
+              ],
+              "tags": [
+                "malware",
+                "command-and-control",
+                "exploit-kit"
+              ]
+            }
+          ]
+        },
+        "sightings": {
+          "count": 5,
+          "docs": [
+            {
+              "id": "sighting-8d7f9e6c-4b2a-11ec-81d3-0242ac130003",
+              "count": 12,
+              "observed_time": {
+                "start_time": "2024-01-16T00:00:00.000Z",
+                "end_time": "2024-01-16T23:59:59.000Z"
+              },
+              "source": "Cisco Firepower",
+              "internal": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "module": "Cisco SecureX Ribbon",
+      "module_instance_id": "1fa78c52-f5e6-5g56-b02e-6d2e4d9d5c0f",
+      "module_type_id": "3f7g9f5e-4g8d-5c3b-0e7f-2d9g6e0f4b8c",
+      "data": {
+        "verdicts": {
+          "count": 1,
+          "docs": [
+            {
+              "type": "verdict",
+              "observable": {
+                "type": "ip",
+                "value": "198.51.100.42"
+              },
+              "disposition": 1,
+              "disposition_name": "Clean",
+              "valid_time": {
+                "start_time": "2024-01-10T12:00:00.000Z",
+                "end_time": "2024-02-10T12:00:00.000Z"
+              },
+              "source": "Cisco AMP for Endpoints"
+            }
+          ]
+        },
+        "judgements": {
+          "count": 0,
+          "docs": []
+        }
+      }
+    }
+  ],
+  "debug_metadata": {
+    "request_id": "req-a7f9d8c6-4b2a-11ec-81d3-0242ac130003",
+    "response_timestamp": "2024-01-16T16:30:00.000Z",
+    "processing_time_ms": 342,
+    "modules_queried": 8,
+    "modules_responded": 2
+  },
+  "internal_routing_info": {
+    "tenant_id": "org-12345",
+    "region": "us-east-1",
+    "cache_hit": false
+  }
+}

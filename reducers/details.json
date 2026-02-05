@@ -1,0 +1,41 @@
+{
+  "root": {
+    "path": "",
+    "on_null": "return_empty"
+  },
+  "pipeline": [
+    {
+      "op": "copy",
+      "from": "data[].data.verdicts.docs[].disposition_name",
+      "to": "reduced_results.verdict_disposition_names"
+    },
+    {
+      "op": "copy",
+      "from": "data[].data.judgements.docs[].severity",
+      "to": "reduced_results.judgement_severities"
+    },
+    {
+      "op": "copy",
+      "from": "data[].data.verdicts.docs[].valid_time.start_time",
+      "to": "reduced_results.verdict_valid_start_times"
+    },
+    {
+      "op": "copy",
+      "from": "data[].data.judgements.docs[].priority",
+      "to": "reduced_results.judgement_priorities"
+    },
+    {
+      "op": "copy",
+      "from": "data[].data.judgements.docs[].tlp",
+      "to": "reduced_results.judgement_tlp_levels"
+    },
+    {
+      "op": "prune",
+      "strategy": "empty_values",
+      "target": "reduced_results"
+    }
+  ],
+  "output": {
+    "result": "$working.reduced_results"
+  }
+}
